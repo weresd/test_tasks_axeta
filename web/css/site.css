@@ -113,3 +113,8 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+body .kv-drp-dropdown .kv-clear {
+    right: 2.3rem;
+    line-height: 2.3rem;
+}
