@@ -1,20 +1,26 @@
 <?php
 
+use app\components\FileSaver;
+use yii\web\Application;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => 'claims',
+    'name' => 'Claims',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'some_key_1',
+            'cookieValidationKey' => 'yjgukgukyugkuk',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -46,10 +52,21 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
+            'rules' => [],
+        ],
+        'i18n' => [
+            'translations' => [
+                'app' => ['class' => 'yii\i18n\PhpMessageSource'],
             ],
         ],
+        'fileSaver' =>[
+            'class' => FileSaver::class,
+            'uploadDir' => '@webroot' . $params['upload_dir'],
+        ],
     ],
+    'on ' . Application::EVENT_BEFORE_REQUEST => function() {
+        Yii::$app->formatter->datetimeFormat = 'php:' . app\components\DateTimeFormats::USER_FORMAT;
+    },
     'params' => $params,
 ];
 
@@ -66,7 +83,7 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1', '::1', '*'],
+        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
